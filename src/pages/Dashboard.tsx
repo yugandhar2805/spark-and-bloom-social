@@ -65,6 +65,14 @@ const Dashboard = () => {
     setSelectedProfile(null);
   };
 
+  const handleHeaderButtonClick = (action: string) => {
+    toast({
+      title: `${action} clicked`,
+      description: `You clicked on the ${action} button`,
+      duration: 2000,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-pink-50/30 dark:from-background dark:to-purple-950/10">
       {/* Header/Navigation */}
@@ -72,14 +80,14 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">LoveMatch</h1>
           <div className="flex items-center space-x-2">
-            <Button size="icon" variant="ghost" className="animate-pulse relative">
+            <Button size="icon" variant="ghost" className="animate-pulse relative" onClick={() => handleHeaderButtonClick("Notifications")}>
               <Bell className="h-5 w-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full"></span>
             </Button>
-            <Button size="icon" variant="ghost">
+            <Button size="icon" variant="ghost" onClick={() => handleHeaderButtonClick("Profile")}>
               <User className="h-5 w-5" />
             </Button>
-            <Button size="icon" variant="ghost">
+            <Button size="icon" variant="ghost" onClick={() => handleHeaderButtonClick("Settings")}>
               <Settings className="h-5 w-5" />
             </Button>
           </div>
@@ -138,46 +146,55 @@ const Dashboard = () => {
           </TabsContent>
           
           <TabsContent value="matches" className="animate-fade-in">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mockProfiles.slice(0, 6).map((profile) => (
-                <Card 
-                  key={profile.id} 
-                  className="overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.02] border-muted cursor-pointer"
-                  onClick={() => handleViewProfile(profile)}
-                >
-                  <CardContent className="p-0">
-                    <div className="relative">
-                      <img 
-                        src={profile.photos[0]} 
-                        alt={profile.name} 
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                        <h3 className="text-white font-bold text-xl">{profile.name}, {profile.age}</h3>
-                        <p className="text-white/80 text-sm">{profile.location}</p>
-                      </div>
-                      {profile.verified && (
-                        <div className="absolute top-2 right-2 bg-blue-500 rounded-full p-1" title="Verified Profile">
-                          <Check className="h-4 w-4 text-white" />
+            {showProfile ? (
+              <div>
+                <ProfilePreview 
+                  profile={selectedProfile} 
+                  onClose={handleCloseProfile}
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {mockProfiles.slice(0, 6).map((profile) => (
+                  <Card 
+                    key={profile.id} 
+                    className="overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.02] border-muted cursor-pointer"
+                    onClick={() => handleViewProfile(profile)}
+                  >
+                    <CardContent className="p-0">
+                      <div className="relative">
+                        <img 
+                          src={profile.photos[0]} 
+                          alt={profile.name} 
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                          <h3 className="text-white font-bold text-xl">{profile.name}, {profile.age}</h3>
+                          <p className="text-white/80 text-sm">{profile.location}</p>
                         </div>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <p className="line-clamp-2 text-sm text-muted-foreground mb-3">{profile.bio}</p>
-                      <Button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewProfile(profile);
-                        }}
-                        className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
-                      >
-                        View Profile
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                        {profile.verified && (
+                          <div className="absolute top-2 right-2 bg-blue-500 rounded-full p-1" title="Verified Profile">
+                            <Check className="h-4 w-4 text-white" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <p className="line-clamp-2 text-sm text-muted-foreground mb-3">{profile.bio}</p>
+                        <Button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewProfile(profile);
+                          }}
+                          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                        >
+                          View Profile
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
           
           <TabsContent value="messages" className="animate-fade-in">
