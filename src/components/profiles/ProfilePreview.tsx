@@ -4,17 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { MapPin, Heart, X, MessageCircle, Calendar, Check } from "lucide-react";
+import { MapPin, Heart, X, MessageCircle, Calendar, CheckCircle, Briefcase, GraduationCap, Ruler } from "lucide-react";
+import { UserProfile } from "@/data/mockProfiles";
+import { QuoteDisplay } from "@/components/ui/quote-display";
 
 interface ProfilePreviewProps {
-  profile: any; // Using any for now, would be better to define a proper type
+  profile: UserProfile | null;
 }
 
 const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
   if (!profile) return null;
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto animate-fade-in">
       <Card className="border-none shadow-none">
         <CardHeader className="p-0">
           <AspectRatio ratio={3/4} className="bg-muted rounded-t-lg overflow-hidden">
@@ -31,9 +33,11 @@ const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
             <div>
               <h2 className="text-3xl font-bold mb-1">
                 {profile.name}, {profile.age}
-                <span className="ml-2 inline-flex items-center">
-                  <Check className="w-5 h-5 text-blue-500" />
-                </span>
+                {profile.verified && (
+                  <span className="ml-2 inline-flex items-center">
+                    <CheckCircle className="w-5 h-5 text-blue-500" />
+                  </span>
+                )}
               </h2>
               <div className="flex items-center text-muted-foreground mb-2">
                 <MapPin className="h-4 w-4 mr-1" />
@@ -43,18 +47,20 @@ const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
               </div>
             </div>
             <div className="flex space-x-1">
-              <Button variant="outline" size="icon" className="rounded-full">
+              <Button variant="outline" size="icon" className="rounded-full border-red-200 hover:bg-red-50 hover:text-red-500 dark:border-red-800 dark:hover:bg-red-950/50">
                 <X className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full text-pink-500 border-pink-200">
-                <Heart className="h-5 w-5 fill-pink-500" />
+              <Button variant="outline" size="icon" className="rounded-full border-pink-200 hover:bg-pink-50 hover:text-pink-500 dark:border-pink-800 dark:hover:bg-pink-950/50">
+                <Heart className="h-5 w-5" />
               </Button>
-              <Button className="rounded-full bg-blue-500 hover:bg-blue-600">
+              <Button className="rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white">
                 <MessageCircle className="h-5 w-5 mr-2" />
                 Message
               </Button>
             </div>
           </div>
+          
+          <QuoteDisplay variant="subtle" className="my-4" />
           
           <Separator className="my-6" />
           
@@ -67,7 +73,7 @@ const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
             <h3 className="text-lg font-semibold mb-3">Interests</h3>
             <div className="flex flex-wrap gap-2">
               {profile.interests.map((interest, index) => (
-                <Badge key={index} variant="secondary">
+                <Badge key={index} variant="secondary" className="bg-muted/50 hover:bg-muted">
                   {interest}
                 </Badge>
               ))}
@@ -76,23 +82,31 @@ const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
           
           <section className="mb-8">
             <h3 className="text-lg font-semibold mb-3">Basic Information</h3>
-            <div className="grid grid-cols-2 gap-y-4">
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                <span>Looking for: Long-term</span>
-              </div>
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                <span>Relationship: Single</span>
-              </div>
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                <span>Height: 5'9"</span>
-              </div>
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                <span>Education: Bachelor's</span>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4">
+              {profile.job && (
+                <div className="flex items-center">
+                  <Briefcase className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span>Work: {profile.job}</span>
+                </div>
+              )}
+              {profile.education && (
+                <div className="flex items-center">
+                  <GraduationCap className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span>Education: {profile.education}</span>
+                </div>
+              )}
+              {profile.height && (
+                <div className="flex items-center">
+                  <Ruler className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span>Height: {profile.height}</span>
+                </div>
+              )}
+              {profile.relationshipGoal && (
+                <div className="flex items-center">
+                  <Heart className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <span>Looking for: {profile.relationshipGoal}</span>
+                </div>
+              )}
             </div>
           </section>
         </CardContent>
