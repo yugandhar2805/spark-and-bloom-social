@@ -10,9 +10,10 @@ import { QuoteDisplay } from "@/components/ui/quote-display";
 
 interface ProfilePreviewProps {
   profile: UserProfile | null;
+  onClose?: () => void;
 }
 
-const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
+const ProfilePreview = ({ profile, onClose }: ProfilePreviewProps) => {
   if (!profile) return null;
 
   return (
@@ -47,6 +48,15 @@ const ProfilePreview = ({ profile }: ProfilePreviewProps) => {
               </div>
             </div>
             <div className="flex space-x-1">
+              {onClose && (
+                <Button 
+                  onClick={onClose} 
+                  variant="outline" 
+                  className="rounded-full"
+                >
+                  Back
+                </Button>
+              )}
               <Button variant="outline" size="icon" className="rounded-full border-red-200 hover:bg-red-50 hover:text-red-500 dark:border-red-800 dark:hover:bg-red-950/50">
                 <X className="h-5 w-5" />
               </Button>

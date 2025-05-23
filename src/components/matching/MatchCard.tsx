@@ -101,6 +101,15 @@ const MatchCard = ({ profile, onLike, onPass, onViewProfile }: MatchCardProps) =
     };
   };
 
+  const handleButtonClick = (action: 'like' | 'pass' | 'view') => (event: React.MouseEvent) => {
+    // Stop propagation to prevent card drag events
+    event.stopPropagation();
+    
+    if (action === 'like') onLike();
+    if (action === 'pass') onPass();
+    if (action === 'view') onViewProfile();
+  };
+
   return (
     <Card 
       className="w-full overflow-hidden shadow-lg relative animate-enter"
@@ -168,7 +177,7 @@ const MatchCard = ({ profile, onLike, onPass, onViewProfile }: MatchCardProps) =
           size="lg" 
           variant="outline" 
           className="rounded-full h-14 w-14 border-2 border-red-300 hover:bg-red-50 hover:text-red-500 dark:border-red-700 dark:hover:bg-red-950/50 dark:hover:text-red-400 transition-all duration-200"
-          onClick={onPass}
+          onClick={handleButtonClick('pass')}
         >
           <X className="h-8 w-8" />
         </Button>
@@ -177,7 +186,7 @@ const MatchCard = ({ profile, onLike, onPass, onViewProfile }: MatchCardProps) =
           size="lg" 
           variant="outline" 
           className="rounded-full h-14 w-14 border-2 border-blue-300 hover:bg-blue-50 hover:text-blue-500 dark:border-blue-700 dark:hover:bg-blue-950/50 dark:hover:text-blue-400 transition-all duration-200"
-          onClick={onViewProfile}
+          onClick={handleButtonClick('view')}
         >
           <Eye className="h-6 w-6" />
         </Button>
@@ -186,7 +195,7 @@ const MatchCard = ({ profile, onLike, onPass, onViewProfile }: MatchCardProps) =
           size="lg" 
           variant="outline" 
           className="rounded-full h-14 w-14 border-2 border-pink-300 hover:bg-pink-50 hover:text-pink-500 dark:border-pink-700 dark:hover:bg-pink-950/50 dark:hover:text-pink-400 transition-all duration-200"
-          onClick={onLike}
+          onClick={handleButtonClick('like')}
         >
           <Heart className="h-8 w-8" />
         </Button>

@@ -54,12 +54,15 @@ const Dashboard = () => {
   };
 
   const handleViewProfile = (profile: UserProfile) => {
+    console.log("Viewing profile of:", profile.name);
     setSelectedProfile(profile);
     setShowProfile(true);
   };
 
   const handleCloseProfile = () => {
+    console.log("Closing profile view");
     setShowProfile(false);
+    setSelectedProfile(null);
   };
 
   return (
@@ -106,24 +109,22 @@ const Dashboard = () => {
           <TabsContent value="discover" className="animate-fade-in">
             {showProfile ? (
               <div>
-                <Button 
-                  variant="outline" 
-                  className="mb-4"
-                  onClick={handleCloseProfile}
-                >
-                  Back to Discovery
-                </Button>
-                <ProfilePreview profile={selectedProfile} />
+                <ProfilePreview 
+                  profile={selectedProfile} 
+                  onClose={handleCloseProfile}
+                />
               </div>
             ) : (
               <div className="flex flex-col items-center">
                 <div className="w-full max-w-md">
-                  <MatchCard 
-                    profile={mockProfiles[currentProfileIndex]}
-                    onLike={() => handleSwipe(true)}
-                    onPass={() => handleSwipe(false)}
-                    onViewProfile={() => handleViewProfile(mockProfiles[currentProfileIndex])}
-                  />
+                  {mockProfiles.length > 0 && (
+                    <MatchCard 
+                      profile={mockProfiles[currentProfileIndex]}
+                      onLike={() => handleSwipe(true)}
+                      onPass={() => handleSwipe(false)}
+                      onViewProfile={() => handleViewProfile(mockProfiles[currentProfileIndex])}
+                    />
+                  )}
                 </div>
                 <Button 
                   variant="outline" 
@@ -139,7 +140,11 @@ const Dashboard = () => {
           <TabsContent value="matches" className="animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {mockProfiles.slice(0, 6).map((profile) => (
-                <Card key={profile.id} className="overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.02] border-muted">
+                <Card 
+                  key={profile.id} 
+                  className="overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.02] border-muted cursor-pointer"
+                  onClick={() => handleViewProfile(profile)}
+                >
                   <CardContent className="p-0">
                     <div className="relative">
                       <img 
@@ -160,7 +165,10 @@ const Dashboard = () => {
                     <div className="p-4">
                       <p className="line-clamp-2 text-sm text-muted-foreground mb-3">{profile.bio}</p>
                       <Button 
-                        onClick={() => handleViewProfile(profile)} 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleViewProfile(profile);
+                        }}
                         className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
                       >
                         View Profile
