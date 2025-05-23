@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,9 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, Phone } from "lucide-react";
 import OTPInput from "@/components/auth/OTPInput";
 import SocialLogin from "@/components/auth/SocialLogin";
-import { toast } from "@/components/ui/toaster";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 const Login = () => {
   const navigate = useNavigate();
