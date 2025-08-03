@@ -10,10 +10,12 @@ interface MatchCardProps {
   profile: UserProfile;
   onLike: () => void;
   onPass: () => void;
+  onSuperLike?: () => void;
   onViewProfile: () => void;
+  superLikesRemaining?: number;
 }
 
-const MatchCard = ({ profile, onLike, onPass, onViewProfile }: MatchCardProps) => {
+const MatchCard = ({ profile, onLike, onPass, onSuperLike, onViewProfile, superLikesRemaining = 5 }: MatchCardProps) => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
